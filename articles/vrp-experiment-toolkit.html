@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>从多随机种子结果到论文表格 | 梁飞</title>
+  <meta name="description" content="使用开源 VRP Experiment Toolkit 汇总多随机种子实验，计算 Best、Mean、Std 与 BKS Gap，并生成收敛曲线和论文表格。">
+  <link rel="canonical" href="https://richardliangtnt.github.io/articles/vrp-experiment-toolkit.html">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="从多随机种子结果到论文表格：VRP 实验整理的可复现工作流">
+  <meta property="og:description" content="把重复实验、BKS Gap、收敛曲线与论文表格放进同一条可复现的数据管线。">
+  <meta property="og:image" content="../assets/img/vrp-toolkit-convergence.png">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="../index.html"><span class="brand-mark">FL</span><span>梁飞</span></a>
+      <div class="nav-links">
+        <a class="is-active" href="index.html">文章</a>
+        <a href="../index.html#map">地图</a>
+        <a href="../index.html#research">研究</a>
+        <a href="../index.html#projects">项目</a>
+        <a href="../index.html#contact">联系</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page project-page article-page">
+    <article>
+      <header class="article-header">
+        <div class="tag-row">
+          <span class="tag green">开源工具</span>
+          <span class="tag notranslate" translate="no">VRP</span>
+          <span class="tag">实验工程</span>
+        </div>
+        <h1>从多随机种子结果到论文表格：VRP 实验整理的可复现工作流</h1>
+        <p class="article-deck">一次优秀的算法运行不能代表一个算法。真正能进入论文的证据，需要重复实验、统一统计口径和可追溯的数据处理过程。</p>
+        <div class="article-byline">
+          <span>梁飞</span>
+          <time datetime="2026-09-09">2026-09-09</time>
+          <span>约 9 分钟阅读</span>
+        </div>
+      </header>
+
+      <div class="article-layout">
+        <div class="article-body">
+          <section class="content-block" id="problem">
+            <p class="article-lead">车辆路径算法往往包含随机初始化、随机破坏修复或概率式状态转移。同一个算法在同一个实例上运行多次，最终结果也可能不同。因此，实验整理不是求解结束后的附属工作，而是算法证据链的一部分。</p>
+            <p>手工复制最优值、在不同工作簿中计算均值、临时修改绘图脚本，短期看起来很快，长期却会产生三个问题：统计口径难以复查、图表无法稳定复现、实验目录与论文表格逐渐失去对应关系。</p>
+            <div class="article-callout">
+              <strong>一个更稳妥的原则</strong>
+              <p>求解器只负责输出原始记录；独立的报告工具负责校验、聚合、绘图和导出。两者通过明确的数据格式连接。</p>
+            </div>
+          </section>
+
+          <section class="content-block" id="inputs">
+            <h2>一、先统一三类输入</h2>
+            <p><span class="notranslate" translate="no">VRP Experiment Toolkit</span> 使用长表 CSV，而不是绑定某一种算法的目录结构。最小工作流由三类文件组成。</p>
+            <h3>1. 最终结果</h3>
+            <code class="citation">algorithm,instance,seed,objective,runtime<br>Baseline-A,toy-c,1,112.0,8.2<br>Method-B,toy-c,1,106.0,9.4</code>
+            <p>每一行代表一次独立运行。`algorithm`、`instance` 和 `seed` 共同标识实验，`objective` 是最终目标值，`runtime` 以秒为单位。还可以加入 `vehicles` 与 `distance` 等通用数值列。</p>
+            <h3>2. 收敛日志</h3>
+            <code class="citation">algorithm,instance,seed,iteration,objective<br>Baseline-A,toy-c,1,0,145.0<br>Baseline-A,toy-c,1,10,125.0</code>
+            <p>收敛日志记录运行过程中的历史最好值。不同随机种子不必在完全相同的迭代点写日志，工具会在聚合阶段完成对齐。</p>
+            <h3>3. 可选的 BKS</h3>
+            <code class="citation">instance,bks<br>toy-c,103.0<br>toy-r,148.0</code>
+            <p>如果提供最好已知解，工具会计算相对差距；没有 BKS 时，其余汇总和绘图功能仍然可用。</p>
+          </section>
+
+          <section class="content-block" id="run">
+            <h2>二、用一条命令生成报告</h2>
+            <p>安装仓库后，可以直接运行内置的合成示例：</p>
+            <code class="citation">vrp-report analyze --results examples/synthetic/results.csv --convergence examples/synthetic/convergence.csv --bks examples/synthetic/bks.csv --output-dir reports --step 10</code>
+            <p>命令会在 `reports` 目录中生成 `summary.csv`、`summary.xlsx`、`summary.tex`、`convergence_mean.csv`，以及每个实例对应的收敛图。CSV 方便继续分析，Excel 适合人工检查，LaTeX 可以进入论文排版流程。</p>
+            <div class="hero-actions">
+              <a class="primary-action" href="https://github.com/Richardliangtnt/vrp-experiment-toolkit" target="_blank" rel="noreferrer">打开 GitHub 仓库</a>
+              <a class="secondary-action" href="https://github.com/Richardliangtnt/vrp-experiment-toolkit/tree/main/examples/synthetic" target="_blank" rel="noreferrer">查看合成示例</a>
+            </div>
+          </section>
+
+          <section class="content-block" id="metrics">
+            <h2>三、论文表格中的数字分别回答什么？</h2>
+            <ul class="article-checklist">
+              <li><strong>Best：</strong>算法在多次运行中达到的最好结果，描述潜在求解能力。</li>
+              <li><strong>Mean：</strong>所有独立运行的平均结果，描述典型表现。</li>
+              <li><strong>Std：</strong>结果的离散程度，用于观察随机算法的稳定性。</li>
+              <li><strong>Runtime：</strong>平均运行时间，用于讨论效果与计算成本之间的权衡。</li>
+              <li><strong>BKS Gap：</strong>最好结果相对最好已知解的百分比差距。</li>
+            </ul>
+            <p>工具采用如下 Gap 定义：</p>
+            <code class="citation">gap_percent = 100 × (objective_best - bks) / |bks|</code>
+            <p>这里默认目标值越小越好。研究者仍需在论文中明确优化方向、终止条件、随机种子数量和 BKS 来源，不能只交付一张没有实验语境的表格。</p>
+          </section>
+
+          <section class="content-block" id="convergence">
+            <h2>四、不规则日志怎样画成平均收敛曲线？</h2>
+            <p>实际运行中，不同种子可能在第 10、17、25 次迭代写入日志，不能直接按行号求平均。工具先建立统一迭代网格，再对每条运行轨迹使用“取当前迭代及之前最近一次观测值”的方式采样，最后计算同一网格点上的均值和标准差。</p>
+            <p>这种前向保持方式符合历史最好值的语义：如果第 20 次迭代没有新记录，那么算法截至第 20 次迭代达到的最好值，仍然是此前最近一次记录的最好值。</p>
+            <figure class="article-figure">
+              <img src="../assets/img/vrp-toolkit-convergence.png" alt="VRP Experiment Toolkit 使用合成数据生成的平均收敛曲线">
+              <figcaption>由合成数据生成的示例。实线表示平均历史最好目标值，阴影表示不同运行之间的一个标准差。</figcaption>
+            </figure>
+          </section>
+
+          <section class="content-block" id="integration">
+            <h2>五、怎样接入自己的 ALNS、ACO 或学习型算法？</h2>
+            <ol class="article-steps">
+              <li><strong>固定实验标识。</strong> 每次运行都记录算法名、实例名和随机种子。</li>
+              <li><strong>保存原始输出。</strong> 求解结束时追加一行最终结果，运行过程中追加收敛记录。</li>
+              <li><strong>不要在求解器中计算跨种子统计。</strong> 保留每次运行的原始值，把聚合交给报告工具。</li>
+              <li><strong>先用少量合成或试运行数据检查格式。</strong> 确认列名、单位和优化方向后，再启动大规模实验。</li>
+              <li><strong>把报告命令写入实验说明。</strong> 让图表和表格可以由其他人重新生成。</li>
+            </ol>
+            <p>这种接口不会要求不同算法采用相同代码框架。只要最终转换为约定的长表 CSV，C++、Python 或混合实现都可以进入同一套比较流程。</p>
+          </section>
+
+          <section class="content-block" id="checklist">
+            <h2>六、提交论文前的复现清单</h2>
+            <ul class="article-checklist">
+              <li>随机种子、实例版本与终止条件是否完整保存；</li>
+              <li>所有算法是否采用相同预算和统计口径；</li>
+              <li>失败运行、不可行解和缺失值如何处理；</li>
+              <li>BKS 的来源与版本是否可追溯；</li>
+              <li>表格中的均值和标准差是否能从原始记录重新计算；</li>
+              <li>收敛图的横轴究竟是时间、迭代次数还是评估次数；</li>
+              <li>论文中的最终数字是否对应一个确定的代码提交。</li>
+            </ul>
+          </section>
+
+          <section class="content-block" id="takeaway">
+            <h2>结语</h2>
+            <p>可复现实验不等于增加更多表格，而是让每个结论都能回到明确的原始记录、统计规则和代码版本。把报告过程从求解器中分离出来，可以减少手工整理错误，也让不同算法之间的比较更透明。</p>
+            <p><span class="notranslate" translate="no">VRP Experiment Toolkit</span> 当前版本聚焦最常见的汇总与收敛分析，不包含任何求解器、训练模型、基准解或未公开实验结果。后续改进也会继续围绕通用科研工程能力展开。</p>
+            <div class="hero-actions">
+              <a class="primary-action" href="https://github.com/Richardliangtnt/vrp-experiment-toolkit" target="_blank" rel="noreferrer">查看代码与使用说明</a>
+              <a class="secondary-action" href="mailto:1916847611@qq.com">交流实验复现</a>
+            </div>
+          </section>
+        </div>
+
+        <aside class="article-sidebar">
+          <nav class="article-toc" aria-label="文章目录">
+            <strong>本文目录</strong>
+            <a href="#problem">为什么要独立整理</a>
+            <a href="#inputs">三类输入</a>
+            <a href="#run">运行工具</a>
+            <a href="#metrics">统计指标</a>
+            <a href="#convergence">收敛曲线</a>
+            <a href="#integration">接入算法</a>
+            <a href="#checklist">复现清单</a>
+          </nav>
+          <div class="project-card">
+            <strong>开源仓库</strong>
+            <p>Python 3.10+，MIT License，包含合成数据、自动测试和中英文说明。</p>
+            <a class="text-link" href="https://github.com/Richardliangtnt/vrp-experiment-toolkit" target="_blank" rel="noreferrer">访问 GitHub</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-row">
+      <a href="index.html">返回文章列表</a>
+      <span>示例数据均为人工合成，不包含未公开研究结果</span>
+    </div>
+  </footer>
+  <script src="../assets/js/main.js?v=20260909-toolkit"></script>
+</body>
+</html>
