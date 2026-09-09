@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://richardliangtnt.github.io/</loc>
+    <lastmod>2026-09-09</lastmod>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/articles/</loc>
+    <lastmod>2026-09-09</lastmod>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/articles/vrptw-path-diversity.html</loc>
+    <lastmod>2026-09-09</lastmod>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/projects/published-research.html</loc>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/projects/rl-optimization.html</loc>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/projects/iot-base.html</loc>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/projects/traffic-garage.html</loc>
+  </url>
+  <url>
+    <loc>https://richardliangtnt.github.io/projects/rag-doc-qa.html</loc>
+  </url>
+</urlset>

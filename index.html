@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>梁飞 | AI、数据与 Python 作品集</title>
-  <meta name="description" content="梁飞的个人作品集，聚焦 AI、数据、路径优化、ROS、IoT 和 Python 工程实践。">
+  <title>梁飞 | 车辆路径优化与学习型智能优化</title>
+  <meta name="description" content="梁飞的研究与技术写作主页，聚焦 VRPTW、EVRPTW、元启发式算法、强化学习与可复现实验。">
+  <link rel="canonical" href="https://richardliangtnt.github.io/">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="梁飞 | AI、数据与 Python 作品集">
-  <meta property="og:description" content="梁飞的个人作品集，聚焦路径优化、强化学习、ROS、IoT 和 Python 工程实践。">
+  <meta property="og:title" content="梁飞 | 车辆路径优化与学习型智能优化">
+  <meta property="og:description" content="研究 VRPTW、EVRPTW、元启发式算法与强化学习，并记录可复现的算法实验。">
   <meta property="og:image" content="assets/img/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="梁飞 | AI、数据与 Python 作品集">
-  <meta name="twitter:description" content="梁飞的个人作品集，聚焦路径优化、强化学习、ROS、IoT 和 Python 工程实践。">
+  <meta name="twitter:title" content="梁飞 | 车辆路径优化与学习型智能优化">
+  <meta name="twitter:description" content="研究 VRPTW、EVRPTW、元启发式算法与强化学习，并记录可复现的算法实验。">
   <meta name="twitter:image" content="assets/img/og-image.png">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -24,6 +25,7 @@
         <span>梁飞</span>
       </a>
       <div class="nav-links">
+        <a href="#articles">文章</a>
         <a href="#map">地图</a>
         <a href="#research">研究</a>
         <a href="#projects">项目</a>
@@ -35,17 +37,17 @@
   <main class="page">
     <section class="hero" id="home">
       <div>
-        <p class="eyebrow">Code, research and AI experiments</p>
-        <h1>我在代码里探索真实问题</h1>
+        <p class="eyebrow"><span class="notranslate" translate="no">EVRPTW · Metaheuristics · Reinforcement Learning</span></p>
+        <h1>梁飞｜车辆路径优化研究</h1>
         <p class="hero-copy">
-          我喜欢把研究、工程和 <span class="notranslate" translate="no">AI</span> 工具结合起来：用算法理解路径优化问题，用 <span class="notranslate" translate="no">Python</span> 和 <span class="notranslate" translate="no">ROS</span> 做实验，
-          也在工作之外持续写代码、整理项目、尝试让想法变成可以运行的东西。
+          人工智能硕士研究生，主要研究 <span class="notranslate" translate="no">VRPTW</span>、<span class="notranslate" translate="no">EVRPTW</span> 及其变体。
+          我关注元启发式搜索如何与强化学习协同，也记录算法设计、实验复现和科研工程中的真实问题。
         </p>
         <div class="hero-actions">
-          <a class="primary-action" href="#map">探索项目地图</a>
-          <a class="secondary-action" href="#projects">查看作品</a>
+          <a class="primary-action" href="#articles">阅读研究文章</a>
+          <a class="secondary-action" href="#research">查看研究工作</a>
         </div>
-        <p class="agent-note">本博客完全由 <span class="notranslate" translate="no">AI Agent</span> 工具开发完成，本人仅提供资料并做少量修改。</p>
+        <p class="agent-note">本站采用 <span class="notranslate" translate="no">AI</span> 辅助开发；研究内容、实验结果与技术观点由本人负责。</p>
       </div>
       <aside class="hero-panel" aria-label="作品集亮点">
         <div class="metric">
@@ -61,6 +63,39 @@
           <span>包含移动机器人视觉抓取系统、<span class="notranslate" translate="no">RT-Thread</span> 宠物智能监护系统等实践项目。</span>
         </div>
       </aside>
+    </section>
+
+    <section class="section" id="articles">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">研究写作</p>
+          <h2>把算法为什么有效写清楚</h2>
+          <p>围绕车辆路径优化、学习型元启发式算法和实验工程，记录可以复查、可以讨论、也可以复现的技术判断。</p>
+        </div>
+        <a class="button-link" href="articles/index.html">全部文章</a>
+      </div>
+      <div class="work-grid">
+        <article class="work-card featured">
+          <div class="tag-row">
+            <span class="tag blue">首篇文章</span>
+            <span class="tag notranslate" translate="no">VRPTW</span>
+            <span class="tag">路径多样性</span>
+          </div>
+          <h3>路径多样性为何重要：从 56 个 Solomon 实例理解 VRPTW 搜索</h3>
+          <p>从已发表的 CSO-TS 研究出发，解释为什么“找到不同的路线结构”比单纯扩大搜索次数更值得关注。</p>
+          <a class="text-link" href="articles/vrptw-path-diversity.html">阅读全文</a>
+        </article>
+        <article class="work-card">
+          <div class="tag-row">
+            <span class="tag green">持续更新</span>
+            <span class="tag notranslate" translate="no">EVRPTW</span>
+            <span class="tag">实验工程</span>
+          </div>
+          <h3>接下来会写什么</h3>
+          <p>EVRPTW 入门、充电决策、ALNS 算子设计、多随机种子实验、收敛曲线与论文表格自动化。</p>
+          <a class="text-link" href="articles/index.html#roadmap">查看写作路线</a>
+        </article>
+      </div>
     </section>
 
     <section class="section personal-section">
